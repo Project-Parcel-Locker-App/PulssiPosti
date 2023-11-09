@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { ChakraProvider } from '@chakra-ui/react'
+
 import './App.css'
 import UserLoginPage from './pages/UserLoginPage'
 
@@ -8,7 +10,9 @@ function App() {
 
   return (
     <>
-      <UserLoginPage />
+      <ChakraProvider>
+        <UserLoginPage />
+      </ChakraProvider>
     </>
   )
 }
