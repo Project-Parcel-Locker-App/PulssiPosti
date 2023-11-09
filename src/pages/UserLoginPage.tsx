@@ -73,7 +73,7 @@ function SignupForm() {
         mt={40}
         borderRadius="8px"
       >
-        <Text color="white">Sign Up</Text>
+        <Text color="white">Log In</Text>
       </Button>
     </Box>
   );
