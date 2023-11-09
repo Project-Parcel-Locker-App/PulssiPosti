@@ -1,38 +1,82 @@
 import React, { useState } from 'react';
+import { Input, Button, Box, Text } from '@chakra-ui/react';
 
-function UserLoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+function SignupForm() {
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
-  };
+  const handleSubmit = async () => {
+    try {
+      // Send a POST request to your server with the username and password
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // You can perform necessary actions using the username and password here
+      // Display a success message or handle errors
+      if (response.status === 200) {
+        console.log('Signup successful:', data.message);
+        // Redirect the user to the login page or another page
+      } else {
+        console.error('Signup failed:', data.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
-    <div>
-      <h1>User Login Page</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
-          <input type="text" value={username} onChange={handleUsernameChange} />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input type="password" value={password} onChange={handlePasswordChange} />
-        </div>
-        <button type="submit">Log In</button>
-      </form>
-    </div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      borderColor="#870939"
+      borderWidth="2px"
+      borderRadius="8px"
+      p={4}
+    >
+      <Box mb={10} textAlign="left">
+        <Text mb={4} color="#870939">Username</Text>
+        <Input
+          placeholder="Enter Your Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          focusBorderColor="#870939"
+          width="300px" 
+          height="40px" 
+          borderRadius="8px"
+        />
+      </Box>
+      <Box mb={10} textAlign="left">
+        <Text mb={4} color="#870939">Password</Text>
+        <Input
+          placeholder="Enter Your Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          focusBorderColor="#870939"
+          width="300px" 
+          height="40px" 
+          borderRadius="8px"
+        />
+      </Box >
+      <Button
+        colorScheme="purple"
+        bgColor="#870939"
+        onClick={handleSubmit}
+        width="300px" 
+        height="50px" 
+        mt={40}
+        borderRadius="8px"
+      >
+        <Text color="white">Log In</Text>
+      </Button>
+    </Box>
   );
 }
 
-export default UserLoginPage;
+export default SignupForm;
