@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Input, Button, Box, Text } from '@chakra-ui/react';
+
+import dotenv from 'dotenv';
+// Read environment variables from .env file
+dotenv.config();
 
 function SignupForm() {
   const [username, setUsername] = useState<string>('');
