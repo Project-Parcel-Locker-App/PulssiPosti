@@ -1,18 +1,27 @@
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Link,
+} from "react-router-dom";
 
-import { ChakraProvider } from '@chakra-ui/react'
-
-import './App.css'
-import UserLoginPage from './pages/UserLoginPage'
+import "./App.css";
+import UserLoginScreen from "./screens/UserLoginScreen";
+import UserRegisterScreen from "./screens/UserRegisterScreen";
 
 function App() {
-
+  const router = createBrowserRouter([
+    {
+      path: "/register",
+      element: <UserRegisterScreen />,
+    },
+    {
+      path: "/",
+      element: <UserLoginScreen />,
+    },
+  ]);
   return (
-    <>
-      <ChakraProvider>
-        <UserLoginPage />
-      </ChakraProvider>
-    </>
-  )
+      <RouterProvider router={router} />
+  );
 }
 
-export default App
+export default App;
