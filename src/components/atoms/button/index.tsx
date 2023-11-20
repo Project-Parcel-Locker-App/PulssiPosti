@@ -7,7 +7,7 @@ interface IStyledProps {
 const StyledButton = styled.button<IStyledProps>`
 border-radius: 10px;
 background-color: ${props => !props.disabled ? "#870939" : '#BDBBBC'};
-width: ${props => props.size==='small' ? '131px' : props.size==='large' ? '231px' : '170px'};
+width: ${props => props.size==='small' ? '131px' : props.size==='large' ? '231px' : '193px'};
 height: 35px;
 border-radius: 10px;
 border: none;

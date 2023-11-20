@@ -1,0 +1,136 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import Logo from "../../../assets/logo.png";
+import DashboardIcon from "../../../assets/sidebar/Home_light.png";
+import TrackIcon from "../../../assets/sidebar/trackicon.png";
+import ContactIcon from "../../../assets/sidebar/contacticon.png";
+import SettingIcon from "../../../assets/sidebar/settingicon.png";
+import LightIcon from "../../../assets/sidebar/lighticon.png";
+import LogoutIcon from "../../../assets/sidebar/logouticon.png";
+
+const Wrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  background-color: #870939;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+`;
+
+const StyledLogo = styled.img`
+  width: 197px;
+  height: 40px;
+  margin-left: 38px;
+  margin-top: 28px;
+  margin-bottom: 6px;
+`;
+
+interface IProps {
+  selectedTab: number;
+}
+
+export const Sidebar = ({ selectedTab }: IProps) => {
+  return (
+    <Wrapper>
+      <StyledLogo src={Logo} />
+      <StyledText>Welcome back! Name</StyledText>
+      <Tab
+        id={0}
+        selected={selectedTab === 0}
+        icon={DashboardIcon}
+        name="Dashboard"
+        link="/dashboard"
+      />
+      <Tab
+        id={1}
+        selected={selectedTab === 1}
+        icon={TrackIcon}
+        name="Track"
+        link="/track"
+      />
+      <Tab
+        id={2}
+        selected={selectedTab === 2}
+        icon={ContactIcon}
+        name="Contact us"
+        link="/contact-us"
+      />
+      <Tab id={3} icon={SettingIcon} name="Settings" />
+      <Tab id={4} icon={LightIcon} name="Dark mode" />
+      <Tab id={5} icon={LogoutIcon} name="Log out" />
+    </Wrapper>
+  );
+};
+
+const Tab = (props: any) => {
+  const { id, icon, name, link, selected } = props;
+  const [closed, setClosed] = useState(false);
+  let height;
+  if (!closed || id !== 3) {
+    height = "72px";
+  } else {
+    height = 256 + 72 + "px";
+  }
+
+  return (
+    <TabWrapper height={height}>
+      {link ? (
+        <Link style={{ textDecoration: "none" }} to={link}>
+          <TabSecondWrapper selected={selected} onClick={() => setClosed(!closed)}>
+            <TabIcon src={icon} />
+            <TabName style={selected ? { opacity: 1 } : {}}>{name}</TabName>
+          </TabSecondWrapper>
+        </Link>
+      ) : (
+        <TabSecondWrapper selected={selected} onClick={() => setClosed(!closed)}>
+          <TabIcon src={icon} />
+          <TabName>{name}</TabName>
+        </TabSecondWrapper>
+      )}
+    </TabWrapper>
+  );
+};
+const StyledText = styled.div`
+  color: white;
+  padding-left: 36px;
+  margin-bottom: 37px;
+  font-size: 24px;
+  font-weight: 700;
+  width: 196px;
+`;
+interface ITabWrapper {
+  height?: string;
+}
+const TabWrapper = styled.div<ITabWrapper>`
+  height: ${(props) => (props.height ? props.height : "72px")};
+  transition: 200ms ease-in-out;
+  width: 100%;
+  background-color: #8f1644;
+`;
+const TabSecondWrapper = styled.div<{selected: Boolean}>`
+  height: 72px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 78px;
+  background-color: #870939;
+  transition: 200ms ease-in-out;
+  cursor: pointer;
+  border-top: 3px solid #870939;
+  border-bottom: 3px solid #870939;
+  border-left: 3px solid ${props => props.selected ? "white":"#870939"};
+`;
+const TabIcon = styled.img`
+  margin-right: 16px;
+`;
+const TabName = styled.div`
+  opacity: 0.7;
+  color: white;
+  transition: 200ms ease-in-out;
+  &:hover {
+    opacity: 1;
+  }
+`;
