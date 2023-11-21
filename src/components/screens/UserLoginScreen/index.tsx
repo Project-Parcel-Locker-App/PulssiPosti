@@ -3,13 +3,14 @@ import rocket from "../../../assets/register/rocket.gif";
 import bascket from "../../../assets/register/bascket.gif";
 import { StyledCard } from "../../atoms/card/index";
 import { Button } from "../../atoms/button/index";
+import UserRegisterScreen from "../UserRegisterScreen/index";
 import { Input } from "../../atoms/input/index";
 import axios from "axios";
 import styled from "styled-components";
-import {validateEmail} from "../../../ustils/validation";
+import { validateEmail } from "../../../ustils/validation";
 
 const StyledWrapper = styled.div`
-padding-top: 150px;
+  padding-top: 150px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -17,7 +18,7 @@ padding-top: 150px;
   height: 967px;
   margin: auto;
   @media only screen and (max-width: 744px) {
-padding-top: 72px;
+    padding-top: 72px;
     flex-direction: column-reverse;
     height: 1104px;
     width: 100vw;
@@ -25,7 +26,7 @@ padding-top: 72px;
   }
 `;
 const StyledImage = styled.img`
- width: 480px;
+  width: 480px;
   height: 272px;
 `;
 const StyledBascket = styled.img`
@@ -45,6 +46,7 @@ const ImagesWrapper = styled.div`
 function SignupForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [registerModal, setRegisterModal] = useState<boolean>(false);
 
   const handleSubmit = async () => {
     try {
@@ -73,7 +75,7 @@ function SignupForm() {
           label="Email"
           placeholder="Enter Your Email"
           value={email}
-          onChange={(e) => setEmail(e.target.value )}
+          onChange={(e) => setEmail(e.target.value)}
           type="email"
           // validation=""
         />
@@ -86,7 +88,21 @@ function SignupForm() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <div style={{ height: "24px" }}></div>
-        <Button disabled={!validateEmail(email)||password.length<6} size="small" onClick={handleSubmit} text="Log In" />
+        <Button
+          disabled={!validateEmail(email) || password.length < 6}
+          size="small"
+          onClick={handleSubmit}
+          text="Log In"
+        />
+        <Button
+          size="medium"
+          onClick={() => setRegisterModal(true)}
+          text="Create new account"
+        />
+        <UserRegisterScreen
+          registerModal={registerModal}
+          setRegisterModal={setRegisterModal}
+        />
       </StyledCard>
     </StyledWrapper>
   );
