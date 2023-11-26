@@ -5,9 +5,9 @@ import { StyledCard } from "../../atoms/card/index";
 import { Button } from "../../atoms/button/index";
 import UserRegisterScreen from "../UserRegisterScreen/index";
 import { Input } from "../../atoms/input/index";
-import axios from "axios";
 import styled from "styled-components";
 import { validateEmail } from "../../../ustils/validation";
+import { useNavigate } from "react-router-dom";
 
 const StyledWrapper = styled.div`
   padding-top: 150px;
@@ -44,20 +44,32 @@ const ImagesWrapper = styled.div`
 `;
 
 function SignupForm() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [registerModal, setRegisterModal] = useState<boolean>(false);
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(`http://localhost:3000/users/login`, {
-        email,
-        password,
+      const response = await fetch(`http://localhost:3000/api/users/login`, {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+
+      const data = await response.json();
+
       if (response.status === 200) {
-        console.log("login successful:", response);
+        localStorage.setItem("jwtToken", data.token);
+        navigate("/dashboard");
       } else {
-        console.error("login failed:", response);
+        console.error("Login failed:", data.error);
       }
     } catch (error) {
       console.error("Error:", error);

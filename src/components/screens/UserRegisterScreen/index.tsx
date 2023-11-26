@@ -3,19 +3,24 @@ import { Input } from "../../atoms/input/index";
 import { Modal } from "../../atoms/modal/index";
 import { Button } from "../../atoms/button/index";
 import { validateEmail } from "../../../ustils/validation";
-
+import { useNavigate } from "react-router-dom";
 interface IProps {
   registerModal: boolean;
   setRegisterModal: (value: boolean) => void;
 }
 function SignupForm({ registerModal, setRegisterModal }: IProps) {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState<string>("");
-  const [fullName, setFullName] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [password2, setPassword2] = useState<string>("");
   const [zipCode, setZipCode] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [addressLine1, setAddressLine1] = useState<string>("");
-  const [addressLine2, setAddressLine2] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [country, setCountry] = useState<string>("");
 
   const toggleRegisterModal = () => {
     setRegisterModal(!registerModal);
@@ -23,17 +28,19 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
   const handleSubmit = async () => {
     try {
       // Send a POST request to your server with the username and password
-      const response = await fetch("http://localhost:3000/users/register", {
+      const response = await fetch("http://localhost:3000/api/users/register", {
         method: "POST",
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           password,
           email,
-          fullName,
+          firstName,
+          lastName,
           phoneNumber,
           addressLine1,
-          addressLine2,
+          city,
+          country,
           zipCode,
-         }),
+        }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -42,8 +49,8 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
 
       // Display a success message or handle errors
       if (response.status === 200) {
-        console.log("Signup successful:", data.message);
-        // Redirect the user to the login page or another page
+        localStorage.setItem("jwtToken", data.token);
+        navigate("/dashboard");
       } else {
         console.error("Signup failed:", data.error);
       }
@@ -55,18 +62,36 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
   return (
     <Modal
       width={450}
-      height={609}
+      height={649}
       open={registerModal}
       onCloseModal={toggleRegisterModal}
     >
       <div style={{ padding: "50px" }}>
-        <Input
-          label="Full Name"
-          placeholder="Enter Your Full Name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          // validation=""
-        />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <Input
+            label="First Name"
+            width={170}
+            placeholder="Enter Your First Name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            // validation=""
+          />
+          <Input
+            label="Last Name"
+            width={170}
+            placeholder="Enter Your Last Name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            // validation=""
+          />
+        </div>
         <div style={{ height: "8px" }}></div>
         <Input
           label="Email"
@@ -92,27 +117,35 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
             value={addressLine1}
             onChange={(e) => setAddressLine1(e.target.value)}
           />
-          <div style={{ width: "24px" }}></div>
           <Input
             width={170}
-            label="Address Line 2"
-            placeholder="City, Country"
-            value={addressLine2}
-            onChange={(e) => setAddressLine2(e.target.value)}
+            label="City"
+            placeholder="City"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
           />
         </div>
         <div style={{ height: "8px" }}></div>
-        <Input
-          width={79}
-          label="Zip Code"
-          placeholder="90570"
-          value={zipCode}
-          onChange={(e) => {
-            if (!isNaN(Number(e.target.value))) {
-              setZipCode(e.target.value);
-            }
-          }}
-        />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Input
+            width={170}
+            label="Country"
+            placeholder="Country"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+          />
+          <Input
+            width={79}
+            label="Zip Code"
+            placeholder="90570"
+            value={zipCode}
+            onChange={(e) => {
+              if (!isNaN(Number(e.target.value))) {
+                setZipCode(e.target.value);
+              }
+            }}
+          />
+        </div>
         <div style={{ height: "8px" }}></div>
         <Input
           label="Password"
@@ -120,21 +153,33 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <div style={{ height: "24px" }}></div>
-        <Button
-          disabled={
-            !validateEmail(email) ||
-            fullName.length < 3 ||
-            phoneNumber.length < 10 ||
-            addressLine1.length < 3 ||
-            addressLine2.length < 3 ||
-            zipCode.length !== 5 ||
-            password.length < 6
-          }
-          size="small"
-          onClick={handleSubmit}
-          text="Register"
+        <div style={{ height: "8px" }}></div>
+        <Input
+          label="Password"
+          placeholder="Enter Your Password"
+          value={password2}
+          onChange={(e) => setPassword2(e.target.value)}
         />
+        <div style={{ height: "24px" }}></div>
+        <div style={{ width: "fit-content", margin: 'auto' }}>
+          <Button
+            disabled={
+              !validateEmail(email) ||
+              firstName.length < 3 ||
+              lastName.length < 3 ||
+              phoneNumber.length < 10 ||
+              addressLine1.length < 3 ||
+              city.length < 3 ||
+              country.length < 3 ||
+              zipCode.length !== 5 ||
+              password.length < 6 ||
+              password !== password2
+            }
+            size="large"
+            onClick={handleSubmit}
+            text="Register"
+          />
+        </div>
       </div>
     </Modal>
   );

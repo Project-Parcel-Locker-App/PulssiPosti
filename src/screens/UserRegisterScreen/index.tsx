@@ -8,7 +8,7 @@ function SignupForm() {
   const handleSubmit = async () => {
     try {
       // Send a POST request to your server with the username and password
-      const response = await fetch('/api/signup', {
+      const response = await fetch('/api/users/register', {
         method: 'POST',
         body: JSON.stringify({ username, password }),
         headers: {
