@@ -1,4 +1,6 @@
+import {useEffect}  from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const StyledTable = styled.div`
   width: 100%;
@@ -22,6 +24,10 @@ const StyledHeaderCell = styled.div`
 `;
 
 function DashboardTable() {
+  useEffect(() => {
+    axios.get(`http://localhost:3000/api/parcels/parcels`)
+  }, [])
+
   return (
     <StyledTable>
       <StyledTableHeader>

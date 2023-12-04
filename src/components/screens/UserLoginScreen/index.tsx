@@ -1,6 +1,5 @@
 import { useState } from "react";
 import rocket from "../../../assets/register/rocket.gif";
-import bascket from "../../../assets/register/bascket.gif";
 import { StyledCard } from "../../atoms/card/index";
 import { Button } from "../../atoms/button/index";
 import UserRegisterScreen from "../UserRegisterScreen/index";
@@ -8,6 +7,10 @@ import { Input } from "../../atoms/input/index";
 import styled from "styled-components";
 import { validateEmail } from "../../../ustils/validation";
 import { useNavigate } from "react-router-dom";
+import bascket from "../../../assets/register/data.json";
+import Lottie from "react-lottie";
+import axios from "axios";
+import Cookies from 'js-cookie';
 
 const StyledWrapper = styled.div`
   padding-top: 150px;
@@ -29,7 +32,7 @@ const StyledImage = styled.img`
   width: 480px;
   height: 272px;
 `;
-const StyledBascket = styled.img`
+const StyledBascket = styled.div`
   width: 650px;
   height: 415px;
   @media only screen and (max-width: 744px) {
@@ -52,35 +55,41 @@ function SignupForm() {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/users/login`, {
-        method: "POST",
-        body: JSON.stringify({
+      const response = await axios.post(
+        `http://localhost:3000/api/auth/login`,
+        {
           email,
           password,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-
+        }
+      );
+      console.log("refresh_token", response);
+      
       if (response.status === 200) {
-        localStorage.setItem("jwtToken", data.token);
+        localStorage.setItem("Authorization", response.data._access_token_);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data._access_token_}`;
         navigate("/dashboard");
       } else {
-        console.error("Login failed:", data.error);
+        // console.error("Login failed:", data.error);
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
+  const BascketOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: bascket,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
   return (
     <StyledWrapper>
       <ImagesWrapper>
         <StyledImage src={rocket} />
-        <StyledBascket src={bascket} />
+        <StyledBascket>
+          <Lottie options={BascketOptions} isStopped={false} isPaused={false} />
+        </StyledBascket>
       </ImagesWrapper>
       <StyledCard>
         <Input
