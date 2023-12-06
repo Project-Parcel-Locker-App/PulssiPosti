@@ -14,7 +14,6 @@ function LoginPage() {
   if(!authState){
     navigate("/")
   }
-
   return (
     <DashboardScreen />
   );
