@@ -28,23 +28,27 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
   const handleSubmit = async () => {
     try {
       // Send a POST request to your server with the username and password
-      const response = await fetch(`${process.env.REACT_APP_URL}/api/users/register`, {
-        method: "POST",
-        body: JSON.stringify({
-          password,
-          email,
-          firstName,
-          lastName,
-          phoneNumber,
-          addressLine1,
-          city,
-          country,
-          zipCode,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_URL}/api/users/register`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            password,
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            userRole: 'consumer',
+            street: addressLine1,
+            zipCode,
+            city,
+            country,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const data = await response.json();
 
       // Display a success message or handle errors
@@ -112,8 +116,8 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Input
             width={170}
-            label="Address Line 1"
-            placeholder="Apartment Or Unit, Street"
+            label="Street"
+            placeholder="Street"
             value={addressLine1}
             onChange={(e) => setAddressLine1(e.target.value)}
           />
@@ -161,7 +165,7 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
           onChange={(e) => setPassword2(e.target.value)}
         />
         <div style={{ height: "24px" }}></div>
-        <div style={{ width: "fit-content", margin: 'auto' }}>
+        <div style={{ width: "fit-content", margin: "auto" }}>
           <Button
             disabled={
               !validateEmail(email) ||

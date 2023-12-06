@@ -1,4 +1,4 @@
-import {useEffect}  from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -16,6 +16,13 @@ const StyledTableHeader = styled.div`
   font-size: 16px;
   display: flex;
 `;
+const StyledTableRow = styled.div`
+  width: 100%;
+  height: 64px;
+  color: #870939;
+  font-size: 16px;
+  display: flex;
+`;
 const StyledHeaderCell = styled.div`
   width: calc(100% / 6);
   display: flex;
@@ -24,10 +31,18 @@ const StyledHeaderCell = styled.div`
 `;
 
 function DashboardTable() {
-  useEffect(() => {
-    axios.get(`http://localhost:3000/api/parcels/parcels`)
-  }, [])
+  const [parcels, setParcels] = useState([]);
 
+  const getParcels = async () => {
+    const result = await axios.get(`http://localhost:3000/api/parcels/parcels`);
+    if (result) {
+      setParcels(result.data);
+    }
+  };
+  useEffect(() => {
+    getParcels();
+  }, []);
+  
   return (
     <StyledTable>
       <StyledTableHeader>
@@ -39,6 +54,18 @@ function DashboardTable() {
         <StyledHeaderCell>parcel info</StyledHeaderCell>
       </StyledTableHeader>
       <StyledTableHeader>
+        {parcels.map((parcel) => {
+          return (
+            <StyledTableRow>
+              <StyledHeaderCell>{parcel.sender_id}</StyledHeaderCell>
+              <StyledHeaderCell>{parcel.recipient_id}</StyledHeaderCell>
+              <StyledHeaderCell>{parcel.updated_at}</StyledHeaderCell>
+              <StyledHeaderCell>{parcel.parcel_status}</StyledHeaderCell>
+              <StyledHeaderCell>{parcel.updated_at}</StyledHeaderCell>
+              <StyledHeaderCell></StyledHeaderCell>
+            </StyledTableRow>
+          );
+        })}
       </StyledTableHeader>
     </StyledTable>
   );

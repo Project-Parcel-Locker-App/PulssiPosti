@@ -8,6 +8,9 @@ import ContactIcon from "../../../assets/sidebar/contacticon.png";
 import SettingIcon from "../../../assets/sidebar/settingicon.png";
 import LightIcon from "../../../assets/sidebar/lighticon.png";
 import LogoutIcon from "../../../assets/sidebar/logouticon.png";
+import DeleteIcon from "../../../assets/sidebar/deleteicon.png";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const Wrapper = styled.div`
   position: fixed;
@@ -32,12 +35,23 @@ interface IProps {
   selectedTab: number;
 }
 
+
 export const Sidebar = ({ selectedTab }: IProps) => {
-  const navigate = useNavigate();
-  const logOut = () => {
-    localStorage.setItem("jwtToken", "");
-    navigate("/");
+  const [deleteModal, setDeleteModal] = useState(false) 
+  const openDeleteModal = ()  => {
+    setDeleteModal(true)
   }
+  const navigate = useNavigate();
+  const logOut = async () => {
+    const authorization = localStorage.getItem("Authorization");
+    const user = jwtDecode(authorization);
+
+    const response = await axios.post(`http://localhost:3000/api/auth/logout`, {
+      user_id: user?._id,
+    });
+    localStorage.setItem("Authorization", "");
+    navigate("/");
+  };
   return (
     <Wrapper>
       <StyledLogo src={Logo} />
@@ -63,7 +77,18 @@ export const Sidebar = ({ selectedTab }: IProps) => {
         name="Contact us"
         link="/contact-us"
       />
-      <Tab id={3} icon={SettingIcon} name="Settings" />
+      <Tab
+        id={3}
+        icon={SettingIcon}
+        name="Settings"
+        subItems={[
+          {
+            name: "Delete account",
+            icon: DeleteIcon,
+            onTabClick: {openDeleteModal}
+          },
+        ]}
+      />
       <Tab id={4} icon={LightIcon} name="Dark mode" />
       <Tab id={5} icon={LogoutIcon} onTabClick={logOut} name="Log out" />
     </Wrapper>
@@ -111,6 +136,16 @@ const Tab = (props: any) => {
           <TabName>{name}</TabName>
         </TabSecondWrapper>
       )}
+      {props.subItems &&
+        props.subItems.map((subItem) => {
+          console.log('subItem', subItem)
+          return (
+            <TabInsideWrapper selected={selected} onClick={onTabClick}>
+              <TabIcon src={subItem.icon} />
+              <TabName>{subItem.name}</TabName>
+            </TabInsideWrapper>
+          );
+        })}
     </TabWrapper>
   );
 };
@@ -130,6 +165,7 @@ const TabWrapper = styled.div<ITabWrapper>`
   transition: 200ms ease-in-out;
   width: 100%;
   background-color: #8f1644;
+  overflow: hidden;
 `;
 const TabSecondWrapper = styled.div<{ selected: Boolean }>`
   height: 72px;
@@ -144,6 +180,14 @@ const TabSecondWrapper = styled.div<{ selected: Boolean }>`
   border-bottom: 3px solid #870939;
   border-left: 3px solid ${(props) => (props.selected ? "white" : "#870939")};
 `;
+const TabInsideWrapper = styled(TabSecondWrapper)`
+  background-color: #87093900;
+  border-top: 0px solid #870939;
+  border-bottom: 0px solid #870939;
+  padding-left: 0px;
+  justify-content: center;
+`;
+
 const TabIcon = styled.img`
   margin-right: 16px;
 `;

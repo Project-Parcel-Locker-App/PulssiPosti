@@ -7,6 +7,7 @@ function LoginPage() {
   const navigate = useNavigate()
   const auth = userLoaginStatus()
   const [authState, setAuthState] = React.useState<boolean>(false)
+  
   React.useEffect(() => {
     setAuthState(auth)
   }, [auth])

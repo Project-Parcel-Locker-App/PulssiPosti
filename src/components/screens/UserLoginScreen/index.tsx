@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import bascket from "../../../assets/register/data.json";
 import Lottie from "react-lottie";
 import axios from "axios";
-import Cookies from 'js-cookie';
 
 const StyledWrapper = styled.div`
   padding-top: 150px;
@@ -53,23 +52,49 @@ function SignupForm() {
   const [password, setPassword] = useState<string>("");
   const [registerModal, setRegisterModal] = useState<boolean>(false);
 
+  // const handleSubmit = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       `http://localhost:3000/api/auth/login`,
+  //       {
+  //         email,
+  //         password,
+  //       }
+
+  //     );
+  //     console.log("refresh_token", response);
+
+  //     if (response.status === 200) {
+  //       localStorage.setItem("Authorization", response.data._access_token_);
+
+  //       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data._access_token_}`;
+  //       navigate("/dashboard");
+  //     } else {
+  //       // console.error("Login failed:", data.error);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:3000/api/auth/login`,
-        {
+      const response = await fetch(`http://localhost:3000/api/auth/login`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
           email,
           password,
-        }
-      );
-      console.log("refresh_token", response);
-      
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
       if (response.status === 200) {
-        localStorage.setItem("Authorization", response.data._access_token_);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data._access_token_}`;
+        localStorage.setItem("jwtToken", data._access_token_);
         navigate("/dashboard");
       } else {
-        // console.error("Login failed:", data.error);
+        console.error("Login failed:", data.error);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -93,7 +118,7 @@ function SignupForm() {
       </ImagesWrapper>
       <StyledCard>
         <Input
-          label="Email"
+          label="User Name"
           placeholder="Enter Your Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
