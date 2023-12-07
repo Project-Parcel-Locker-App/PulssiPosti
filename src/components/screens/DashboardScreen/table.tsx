@@ -33,6 +33,7 @@ const StyledHeaderCell = styled.div`
   display: flex;
   align-items: center;
   padding-left: 16px;
+  font-weight: bold;
 `;
 const StyledBodyCell = styled(StyledHeaderCell)`
   border: 1px solid rgba(0,0,0,0.1);

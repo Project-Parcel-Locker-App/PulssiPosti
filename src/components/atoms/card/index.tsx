@@ -8,5 +8,5 @@ export const StyledCard = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background: rgba(255, 0, 96, 0.05);
+  background: rgb(255, 242, 247);
 `;

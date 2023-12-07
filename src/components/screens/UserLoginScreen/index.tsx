@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import bascket from "../../../assets/register/data.json";
 import Lottie from "react-lottie";
 import axios from "axios";
+import SocialA from "../../../assets/social/A.png";
+import SocialF from "../../../assets/social/F.png";
+import SocialG from "../../../assets/social/G.png";
 
 const StyledWrapper = styled.div`
   padding-top: 150px;
@@ -45,6 +48,37 @@ const ImagesWrapper = styled.div`
   justify-content: space-between;
 `;
 
+const Line = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #bd054a50;
+  position: relative;
+`;
+
+const LineText = styled.div`
+  width: 128px;
+  background-color: rgb(255, 242, 247);;
+  position: relative;
+  color: black;
+  font-size: 12px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+`;
+const SocialWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 36px;
+  margin-bottom: 54px;
+  & img{
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+`;
 function SignupForm() {
   const navigate = useNavigate();
 
@@ -60,13 +94,10 @@ function SignupForm() {
           email,
           password,
         }
-
       );
-      console.log("refresh_token", response);
 
       if (response.status === 200) {
         localStorage.setItem("Authorization", response.data._access_token_);
-
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data._access_token_}`;
         navigate("/dashboard");
       } else {
@@ -76,8 +107,8 @@ function SignupForm() {
       console.error("Error:", error);
     }
   };
-  
-  
+
+
   const BascketOptions = {
     loop: true,
     autoplay: true,
@@ -101,7 +132,7 @@ function SignupForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
-          // validation=""
+        // validation=""
         />
         <div style={{ height: "8px" }}></div>
         <Input
@@ -118,6 +149,16 @@ function SignupForm() {
           onClick={handleSubmit}
           text="Log In"
         />
+        <div style={{ marginTop: "10px", fontSize: '12px', color: '#bd054a' }}>Forget your account?</div>
+        <div style={{ height: "58px" }}></div>
+        <Line>
+          <LineText>Or Sign Up Using</LineText>
+        </Line>
+        <SocialWrapper>
+          <img src={SocialA} />
+          <img src={SocialF} />
+          <img src={SocialG} />
+        </SocialWrapper>
         <Button
           size="medium"
           onClick={() => setRegisterModal(true)}
