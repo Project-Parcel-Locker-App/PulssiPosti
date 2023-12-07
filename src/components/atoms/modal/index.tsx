@@ -32,7 +32,7 @@ const Card = styled.div<ICardStyledProps>`
   width: ${(props) => props.width + "px"};
   height: ${(props) => props.height + "px"};
   background-color: white;
-  border-radius: 10px;
+  border-radius: 50px;
 `;
 interface IProps {
   width?: number;
