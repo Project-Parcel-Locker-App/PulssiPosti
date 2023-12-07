@@ -4,6 +4,8 @@ import { Modal } from "../../atoms/modal/index";
 import { Button } from "../../atoms/button/index";
 import { validateEmail } from "../../../ustils/validation";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 interface IProps {
   registerModal: boolean;
   setRegisterModal: (value: boolean) => void;
@@ -27,36 +29,29 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
   };
   const handleSubmit = async () => {
     try {
-      // Send a POST request to your server with the username and password
-      const response = await fetch(
-        `${process.env.REACT_APP_URL}/api/users/register`,
+      const response = await axios.post(
+        `http://localhost:3000/api/users/register`,
         {
-          method: "POST",
-          body: JSON.stringify({
-            password,
-            firstName,
-            lastName,
-            email,
-            phoneNumber,
-            userRole: 'consumer',
-            street: addressLine1,
-            zipCode,
-            city,
-            country,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
+          password,
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          userRole: 'consumer',
+          street: addressLine1,
+          zipCode,
+          city,
+          country,
         }
-      );
-      const data = await response.json();
 
-      // Display a success message or handle errors
+      );
       if (response.status === 200) {
-        localStorage.setItem("jwtToken", data.token);
+        localStorage.setItem("Authorization", response.data._access_token_);
+
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data._access_token_}`;
         navigate("/dashboard");
       } else {
-        console.error("Signup failed:", data.error);
+        // console.error("Signup failed:", data.error);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -85,7 +80,7 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
             placeholder="Enter Your First Name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            // validation=""
+          // validation=""
           />
           <Input
             label="Last Name"
@@ -93,7 +88,7 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
             placeholder="Enter Your Last Name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            // validation=""
+          // validation=""
           />
         </div>
         <div style={{ height: "8px" }}></div>
@@ -103,7 +98,7 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
-          // validation=""
+        // validation=""
         />
         <div style={{ height: "8px" }}></div>
         <Input

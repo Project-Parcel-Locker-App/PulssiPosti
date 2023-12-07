@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../../assets/logo.png";
@@ -10,6 +10,7 @@ import LightIcon from "../../../assets/sidebar/lighticon.png";
 import LogoutIcon from "../../../assets/sidebar/logouticon.png";
 import DeleteIcon from "../../../assets/sidebar/deleteicon.png";
 import axios from "axios";
+import DeleteModal from "./delete-modal";
 import { jwtDecode } from "jwt-decode";
 
 const Wrapper = styled.div`
@@ -37,8 +38,21 @@ interface IProps {
 
 
 export const Sidebar = ({ selectedTab }: IProps) => {
-  const [deleteModal, setDeleteModal] = useState(false) 
-  const openDeleteModal = ()  => {
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [userProfile, setUserProfile] = useState({})
+  const getUserProfile = async () => {
+    const authorization = localStorage.getItem("Authorization");
+    const user = jwtDecode(authorization);
+    const response = await axios.get(`http://localhost:3000/api/users/${user?._id}`)
+    setUserProfile(response.data)
+  }
+  useEffect(() => {
+    getUserProfile()
+  }, [])
+  const closeDeleteModal = () => {
+    setDeleteModal(false)
+  }
+  const openDeleteModal = () => {
     setDeleteModal(true)
   }
   const navigate = useNavigate();
@@ -55,7 +69,8 @@ export const Sidebar = ({ selectedTab }: IProps) => {
   return (
     <Wrapper>
       <StyledLogo src={Logo} />
-      <StyledText>Welcome back! Name</StyledText>
+      <StyledText>Welcome back! {userProfile.first_name}</StyledText>
+      <StyledEmail>{userProfile.email}</StyledEmail>
       <Tab
         id={0}
         selected={selectedTab === 0}
@@ -85,12 +100,13 @@ export const Sidebar = ({ selectedTab }: IProps) => {
           {
             name: "Delete account",
             icon: DeleteIcon,
-            onTabClick: {openDeleteModal}
+            onTabClick: openDeleteModal
           },
         ]}
       />
       <Tab id={4} icon={LightIcon} name="Dark mode" />
       <Tab id={5} icon={LogoutIcon} onTabClick={logOut} name="Log out" />
+      <DeleteModal onCloseModal={closeDeleteModal} open={deleteModal} />
     </Wrapper>
   );
 };
@@ -138,9 +154,8 @@ const Tab = (props: any) => {
       )}
       {props.subItems &&
         props.subItems.map((subItem) => {
-          console.log('subItem', subItem)
           return (
-            <TabInsideWrapper selected={selected} onClick={onTabClick}>
+            <TabInsideWrapper selected={selected} onClick={subItem.onTabClick}>
               <TabIcon src={subItem.icon} />
               <TabName>{subItem.name}</TabName>
             </TabInsideWrapper>
@@ -152,10 +167,15 @@ const Tab = (props: any) => {
 const StyledText = styled.div`
   color: white;
   padding-left: 36px;
-  margin-bottom: 37px;
+  margin-bottom: 10px;
   font-size: 24px;
   font-weight: 700;
   width: 196px;
+`;
+const StyledEmail = styled(StyledText)`
+  margin-bottom: 37px;
+  font-weight: normal;
+  font-size: 14px;
 `;
 interface ITabWrapper {
   height?: string;
