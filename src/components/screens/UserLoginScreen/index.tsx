@@ -52,54 +52,32 @@ function SignupForm() {
   const [password, setPassword] = useState<string>("");
   const [registerModal, setRegisterModal] = useState<boolean>(false);
 
-  // const handleSubmit = async () => {
-  //   try {
-  //     const response = await axios.post(
-  //       `http://localhost:3000/api/auth/login`,
-  //       {
-  //         email,
-  //         password,
-  //       }
-
-  //     );
-  //     console.log("refresh_token", response);
-
-  //     if (response.status === 200) {
-  //       localStorage.setItem("Authorization", response.data._access_token_);
-
-  //       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data._access_token_}`;
-  //       navigate("/dashboard");
-  //     } else {
-  //       // console.error("Login failed:", data.error);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/auth/login`, {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify({
+      const response = await axios.post(
+        `http://localhost:3000/api/auth/login`,
+        {
           email,
           password,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
+        }
+
+      );
+      console.log("refresh_token", response);
+
       if (response.status === 200) {
-        localStorage.setItem("jwtToken", data._access_token_);
+        localStorage.setItem("Authorization", response.data._access_token_);
+
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data._access_token_}`;
         navigate("/dashboard");
       } else {
-        console.error("Login failed:", data.error);
+        // console.error("Login failed:", data.error);
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
+  
+  
   const BascketOptions = {
     loop: true,
     autoplay: true,
