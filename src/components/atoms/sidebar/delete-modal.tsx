@@ -38,7 +38,7 @@ function DeleteModal({ open, onCloseModal }: any) {
   const onDeleteClick = async () => {
     const authorization = localStorage.getItem("Authorization");
     const user = jwtDecode(authorization);
-    await axios.delete(`http://localhost:3000/api/users/${user?._id}`);
+    await axios.delete(`http://localhost:3000/api/users/${user?.id}`);
     localStorage.setItem("Authorization", "");
     navigate("/");
   }

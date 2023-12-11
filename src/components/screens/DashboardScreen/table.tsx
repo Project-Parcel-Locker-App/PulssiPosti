@@ -48,7 +48,7 @@ function DashboardTable() {
   const getParcels = async () => {
     const authorization = localStorage.getItem("Authorization");
     const user = jwtDecode(authorization);
-    const result = await axios.get(`http://localhost:3000/api/users/${user?._id}/parcels`);
+    const result = await axios.get(`http://localhost:3000/api/users/${user?.id}/parcels`);
     if (result) {
       setParcels(result.data);
     }
@@ -76,8 +76,8 @@ function DashboardTable() {
         console.log('parcel', parcel)
         return (
           <StyledTableRow>
-            <StyledBodyCell>{parcel.sender_id}</StyledBodyCell>
-            <StyledBodyCell>{parcel.recipient_id}</StyledBodyCell>
+            <StyledBodyCell>{parcel.sender_full_name}</StyledBodyCell>
+            <StyledBodyCell>{parcel.recipient_full_name}</StyledBodyCell>
             <StyledBodyCell></StyledBodyCell>
             <StyledBodyCell>
               <Status status={parcel.parcel_status} />

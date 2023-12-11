@@ -43,7 +43,7 @@ export const Sidebar = ({ selectedTab }: IProps) => {
   const getUserProfile = async () => {
     const authorization = localStorage.getItem("Authorization");
     const user = jwtDecode(authorization);
-    const response = await axios.get(`http://localhost:3000/api/users/${user?._id}`)
+    const response = await axios.get(`http://localhost:3000/api/users/${user?.id}`)
     setUserProfile(response.data)
   }
   useEffect(() => {

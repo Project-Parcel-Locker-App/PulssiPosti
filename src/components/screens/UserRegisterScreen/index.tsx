@@ -30,7 +30,7 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/users/register`,
+        `http://localhost:3000/api/auth/register`,
         {
           password,
           firstName,
