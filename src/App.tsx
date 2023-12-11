@@ -6,7 +6,7 @@ import {
 import "./App.css";
 import UserLoginScreen from "./screens/UserLoginScreen";
 import DashboardScreenScreen from "./screens/DashboardScreen";
-// import SendParcelScreenScreen from "./screens/SendParcelScreen";
+import SendParcelScreenScreen from "./screens/SendParcelScreen";
 import {createAxiosResponseInterceptor} from "./ustils/auth"
 
 function App() {
@@ -24,12 +24,12 @@ function App() {
         <DashboardScreenScreen />
       ),
     },
-    // {
-    //   path: "/track",
-    //   element: (
-    //     <SendParcelScreenScreen />
-    //   ),
-    // },
+    {
+      path: "/track",
+      element: (
+        <SendParcelScreenScreen />
+      ),
+    },
   ]);
   return <RouterProvider router={router} />;
 }
