@@ -21,8 +21,8 @@ function Dashboard() {
           <DashboardTable />
         </PageWrapper>
       </StyledWrapper>
-      <Navbar />
-      <Sidebar selectedTab={0} />
+      <Navbar data-testid="navbar"/>
+      <Sidebar selectedTab={0} data-testid="sidebar"/>
     </>
   );
 }
