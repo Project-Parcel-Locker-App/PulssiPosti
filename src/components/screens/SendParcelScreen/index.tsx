@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { Sidebar } from '../../atoms/sidebar/index'
 import { Navbar } from '../../atoms/navbar/index'
-import { StyledWrapper, StyledTrack } from '../../atoms/wrapper/index'
-import { Input } from '../../atoms/input/index'
-import { Button } from '../../atoms/button/index'
+import { StyledWrapper } from '../../atoms/wrapper/index'
+import Boxes from './boxes'
+import Form from './form'
 
 function SendParcel() {
+  const [step, setStep] = useState<number>(1)
+  const [selectedSize, setSelected] = useState<string>('')
+  
   const [senderName, setSenderName] = useState<string>("")
   const [recipientName, setRecipientName] = useState<string>("")
   const [streetAdress, setStreetAdress] = useState<string>("")
@@ -15,55 +18,36 @@ function SendParcel() {
   const handleSubmit = async () => {
 
   }
+
   return (
     <>
       <StyledWrapper>
-        <div style={{marginTop: '62px', marginLeft: '74px', fontSize:'36px'}}>
+        <div style={{ marginTop: '62px', marginLeft: '74px', fontSize: '36px' }}>
           Enter your details
         </div>
-        <StyledTrack>
-          <Input
-            label="Sender Name"
-            placeholder="Sender Name *"
-            value={senderName}
-            onChange={(e) => setSenderName(e.target.value)}
+        {
+          step === 1 &&
+          <Boxes
+            setStep={setStep}
+            setSelected={setSelected}
           />
-          <div style={{ height: "8px" }}></div>
-          <Input
-            label="Recipient Name"
-            placeholder="Recipient Name"
-            value={recipientName}
-            onChange={(e) => setRecipientName(e.target.value)}
+        }
+        {
+          step === 2 &&
+          <Form
+            senderName={senderName}
+            setSenderName={setSenderName}
+            recipientName={recipientName}
+            setRecipientName={setRecipientName}
+            streetAdress={streetAdress}
+            setStreetAdress={setStreetAdress}
+            postalCode={postalCode}
+            setPostalCode={setPostalCode}
+            city={city}
+            setCity={setCity}
+            handleSubmit={handleSubmit}
           />
-          <div style={{ height: "24px" }}></div>
-          <Input
-            label="Street Address"
-            placeholder="Street Address"
-            value={streetAdress}
-            onChange={(e) => setStreetAdress(e.target.value)}
-          />
-          <div style={{ height: "24px" }}></div>
-          <Input
-            label="Postal Code"
-            placeholder="Postal Code"
-            value={postalCode}
-            onChange={(e) => setPostalCode(e.target.value)}
-          />
-          <div style={{ height: "24px" }}></div>
-          <Input
-            label="City"
-            placeholder="City"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-          />
-          <div style={{ height: "24px" }}></div>
-          <Button
-            disabled={false}
-            size="larg"
-            onClick={handleSubmit}
-            text="Send"
-          />
-        </StyledTrack>
+        }
       </StyledWrapper>
       <Navbar />
       <Sidebar selectedTab={1} />
