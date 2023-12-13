@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { Modal } from "../../atoms/modal/index";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const Title = styled.div`
   color: #870939;
@@ -20,7 +23,22 @@ const Row = styled.div`
 `;
 
 function ParcelModal({ open, onCloseModal, parcel }: any) {
-  console.log(open, open)
+  const [parcelDetails, setSelectedParcelDetails] = useState({});
+  const getParcel = async () => {
+    const authorization = localStorage.getItem("Authorization");
+    const user = jwtDecode(authorization);
+    const result = await axios.get(`http://localhost:3000/api/users/${user?.id}/parcels/${parcel?.id}`);
+    if (result) { 
+      setSelectedParcelDetails(result.data);
+    }
+  };
+  console.log('parcelDetails ', parcelDetails)
+  useEffect(() => {
+    if(open){
+      getParcel()
+    }
+  }, [open])
+  
   return (
     <Modal
       width={585} height={650} onCloseModal={onCloseModal} open={open}

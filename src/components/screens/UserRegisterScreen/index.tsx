@@ -5,6 +5,7 @@ import { Button } from "../../atoms/button/index";
 import { validateEmail } from "../../../ustils/validation";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 interface IProps {
   registerModal: boolean;
@@ -45,16 +46,17 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
         }
 
       );
-      if (response.status === 200) {
+      if (response) {
         localStorage.setItem("Authorization", response.data._access_token_);
 
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data._access_token_}`;
         navigate("/dashboard");
       } else {
-        // console.error("Signup failed:", data.error);
+       toast.error('Signup failed')
+        console.error("Signup failed:");
       }
     } catch (error) {
-      console.error("Error:", error);
+      toast(error?.response.data.error.issues[0].message)
     }
   };
 
@@ -167,10 +169,10 @@ function SignupForm({ registerModal, setRegisterModal }: IProps) {
               firstName.length < 3 ||
               lastName.length < 3 ||
               phoneNumber.length < 10 ||
-              addressLine1.length < 3 ||
-              city.length < 3 ||
-              country.length < 3 ||
-              zipCode.length !== 5 ||
+              // addressLine1.length < 3 ||
+              // city.length < 3 ||
+              // country.length < 3 ||
+              // zipCode.length !== 5 ||
               password.length < 6 ||
               password !== password2
             }

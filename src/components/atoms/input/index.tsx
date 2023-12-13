@@ -7,7 +7,7 @@ const StyledInputWrapper = styled.div<IStyledProps>`
   width: ${(props) => (props.width ? props.width + "px" : "345px")};
 `;
 
-const StyledLabel = styled.div`
+export const StyledLabel = styled.div`
   height: 19px;
   width: 100%;
   color: #bd054a;

@@ -13,6 +13,7 @@ import axios from "axios";
 import SocialA from "../../../assets/social/A.png";
 import SocialF from "../../../assets/social/F.png";
 import SocialG from "../../../assets/social/G.png";
+import { toast } from 'react-toastify';
 
 const StyledWrapper = styled.div`
   padding-top: 150px;
@@ -104,6 +105,7 @@ function SignupForm() {
         // console.error("Login failed:", data.error);
       }
     } catch (error) {
+      toast(error?.response.data.message)
       console.error("Error:", error);
     }
   };

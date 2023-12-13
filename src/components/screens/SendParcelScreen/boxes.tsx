@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import styled from 'styled-components';
 import lIcon from "../../../assets/sizes/l.png";
 import SIcon from "../../../assets/sizes/s.png";
@@ -11,6 +10,7 @@ const Wrapper = styled.div`
     padding-right: 63px;
     display: flex;
     justify-content: space-between;
+    margin-top: 82px;
 `
 
 const StyledBox = styled.div`
