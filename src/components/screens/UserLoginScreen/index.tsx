@@ -7,7 +7,7 @@ import { Input } from "../../atoms/input/index";
 import styled from "styled-components";
 import { validateEmail } from "../../../ustils/validation";
 import { useNavigate } from "react-router-dom";
-import bascket from "../../../assets/register/data.json";
+import bascket from "../../../assets/register/signinpage.json";
 import Lottie from "react-lottie";
 import axios from "axios";
 import SocialA from "../../../assets/social/A.png";

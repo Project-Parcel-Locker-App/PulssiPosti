@@ -45,12 +45,14 @@ function ParcelModal({ open, onCloseModal, parcel }: any) {
     >
       <Title>Parcel Details</Title>
       <Row><b>Pickup point:</b> </Row>
-      <Row><b>Code:</b></Row>
+      <Row><b>Code:</b>{parcelDetails?.sending_code}</Row>
       <Row><b>Special Instructions:</b> {parcel.special_instructions}</Row>
       <Row><b>Parcel Weight:</b> {parcel.parcel_weight}</Row>
       <Row><b>Size:</b> {parcel.parcel_size}</Row>
     </Modal>
   );
+
 }
+
 
 export default ParcelModal;

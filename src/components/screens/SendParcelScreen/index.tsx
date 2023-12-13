@@ -30,8 +30,8 @@ function SendParcel() {
         parcel: {
           parcel_size: selectedSize,
           recipient_email: recipientEmail,
-          sending_code: sendingCode,
-          pickup_code: pickupCode,
+          sending_code: sendingCode.toString(),
+          pickup_code: pickupCode.toString(),
           parcel_weight: parcelWeight,
           special_instructions: specialInstructions
         }
